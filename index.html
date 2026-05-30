@@ -159,7 +159,7 @@
         }
 
         .status-value {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--text-main);
             margin-bottom: 20px;
@@ -281,7 +281,7 @@
         <div class="status-title">Твоя подписка</div>
         <div class="status-value" id="status-text">Не активна</div>
         
-        <button class="btn-primary" onclick="requestVPN()">Получить настройки</button>
+        <button id="btn-vpn" class="btn-primary" onclick="requestVPN()">Получить настройки</button>
     </div>
 
     <div class="section-title">Продлить доступ</div>
@@ -314,19 +314,72 @@
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
         }
 
-        // Читаем баланс, который передал бот в ссылке (?balance=150)
+        // Читаем данные, переданные от бота
         const urlParams = new URLSearchParams(window.location.search);
         const userBalance = urlParams.get('balance') || '0';
+        const subActive = urlParams.get('sub_active') || '0';
+        const expiresAt = urlParams.get('expires_at') || '';
+        const vlessLink = urlParams.get('vless_link') || '';
+
+        // Обновляем Баланс
         document.getElementById('balance-amount').innerText = userBalance;
 
-        function topUp() {
-            tg.HapticFeedback.impactOccurred('medium');
-            tg.sendData('topup'); // Отправляем сигнал на пополнение
+        // Обновляем статус подписки
+        const statusText = document.getElementById('status-text');
+        const btnVpn = document.getElementById('btn-vpn');
+
+        if (subActive === '1') {
+            statusText.innerText = `Активна до ${expiresAt}`;
+            statusText.style.color = '#00FF88'; // Делаем текст зеленым
+            
+            if (vlessLink !== '') {
+                btnVpn.innerText = 'Скопировать ключ VPN';
+            }
+        } else {
+            statusText.innerText = 'Не активна';
+            statusText.style.color = 'var(--text-main)';
+        }
+
+        function copyToClipboard(text) {
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                return true;
+            } catch (err) {
+                return false;
+            } finally {
+                document.body.removeChild(tempInput);
+            }
         }
 
         function requestVPN() {
             tg.HapticFeedback.impactOccurred('medium');
-            tg.sendData('get_vpn'); 
+            
+            if (subActive === '0') {
+                tg.showAlert('⚠️ У вас нет активной подписки. Сначала оплатите тариф в магазине ниже.');
+                return;
+            }
+
+            if (vlessLink !== '') {
+                // Ключ уже сгенерирован -> копируем его прямо в WebApp
+                const copied = copyToClipboard(vlessLink);
+                if (copied) {
+                    tg.showAlert('✅ Ваш личный ключ успешно скопирован!\n\nЗакройте это окно, откройте приложение v2rayTUN или FoXray, нажмите "+" и выберите "Импорт из буфера обмена".');
+                } else {
+                    tg.showPopup({title: 'Ваш ключ', message: vlessLink});
+                }
+            } else {
+                // Подписка есть, но ключа еще нет -> просим бота сгенерировать
+                tg.sendData('get_vpn'); 
+            }
+        }
+
+        function topUp() {
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.sendData('topup');
         }
 
         function buyPlan(planId) {
@@ -336,4 +389,3 @@
     </script>
 </body>
 </html>
-</html> 
