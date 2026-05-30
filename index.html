@@ -39,7 +39,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .user-greeting {
@@ -58,7 +58,55 @@
             color: var(--text-main);
         }
 
-        /* Главная карточка статуса (Glassmorphism) */
+        /* Карточка баланса */
+        .balance-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .balance-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .balance-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .btn-topup {
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            border-radius: 14px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-topup:active {
+            background: rgba(0, 229, 255, 0.2);
+            transform: scale(0.95);
+        }
+
+        /* Главная карточка статуса */
         .status-card {
             background: var(--surface-color);
             backdrop-filter: blur(10px);
@@ -74,7 +122,6 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* Анимация свечения на фоне карточки */
         .status-card::before {
             content: '';
             position: absolute;
@@ -82,19 +129,13 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(0, 229, 255, 0.1) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.05) 0%, transparent 60%);
             z-index: -1;
-            animation: pulse 4s infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.5; }
-            100% { transform: scale(1.05); opacity: 1; }
         }
 
         .shield-icon {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background: rgba(0, 229, 255, 0.1);
             border-radius: 50%;
             display: flex;
@@ -102,23 +143,23 @@
             justify-content: center;
             margin-bottom: 15px;
             border: 2px solid var(--accent-color);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
         }
 
         .shield-icon svg {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             fill: var(--accent-color);
         }
 
         .status-title {
-            font-size: 16px;
+            font-size: 14px;
             color: var(--text-muted);
             margin-bottom: 5px;
         }
 
         .status-value {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             color: var(--text-main);
             margin-bottom: 20px;
@@ -146,7 +187,7 @@
         .section-title {
             font-size: 18px;
             font-weight: 600;
-            margin: 30px 0 15px 0;
+            margin: 25px 0 15px 0;
         }
 
         .tariffs {
@@ -212,7 +253,6 @@
             border-radius: 10px;
             text-transform: uppercase;
         }
-
     </style>
 </head>
 <body>
@@ -222,6 +262,14 @@
             <span>Добро пожаловать,</span>
             <span id="username">Пользователь</span>
         </div>
+    </div>
+
+    <div class="balance-card">
+        <div class="balance-info">
+            <span class="balance-label">Мой баланс</span>
+            <div class="balance-value"><span id="balance-amount">0</span> ₽</div>
+        </div>
+        <button class="btn-topup" onclick="topUp()">Пополнить</button>
     </div>
 
     <div class="status-card">
@@ -255,33 +303,37 @@
     </div>
 
     <script>
-        // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
-        
-        // Разворачиваем приложение на весь экран телефона
         tg.expand();
         tg.ready();
 
-        // Устанавливаем цвета приложения под тему Telegram
         tg.setHeaderColor('#0B0E14');
         tg.setBackgroundColor('#0B0E14');
 
-        // Подтягиваем имя пользователя из Телеграма (если есть)
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
         }
 
-        // Функция запроса VPN (отправляет данные боту)
-        function requestVPN() {
-            tg.HapticFeedback.impactOccurred('medium'); // Вибрация при нажатии
-            tg.sendData('get_vpn'); // Бот поймает это сообщение
+        // Читаем баланс, который передал бот в ссылке (?balance=150)
+        const urlParams = new URLSearchParams(window.location.search);
+        const userBalance = urlParams.get('balance') || '0';
+        document.getElementById('balance-amount').innerText = userBalance;
+
+        function topUp() {
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.sendData('topup'); // Отправляем сигнал на пополнение
         }
 
-        // Функция покупки (отправляет данные боту)
+        function requestVPN() {
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.sendData('get_vpn'); 
+        }
+
         function buyPlan(planId) {
-            tg.HapticFeedback.impactOccurred('heavy'); // Сильная вибрация
-            tg.sendData(planId); // Отправляем ID тарифа в бота (например, sub_1_month)
+            tg.HapticFeedback.impactOccurred('heavy');
+            tg.sendData(planId); 
         }
     </script>
 </body>
+</html>
 </html> 
