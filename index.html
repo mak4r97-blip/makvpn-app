@@ -105,7 +105,8 @@
             <button class="btn-topup" onclick="tg.sendData('topup')">Пополнить</button>
         </div>
 
-        <div class="section-title">Продлить доступ (1 устр-во)</div>
+        <div class="section-title">Продлить доступ</div>
+        
         <div class="tariffs">
             <div class="tariff-card">
                 <div class="tariff-months">1 месяц</div>
@@ -118,6 +119,13 @@
                 <div class="tariff-price">400₽</div>
                 <button class="btn-buy" onclick="openDeviceModal('3_months', 400)">Выбрать</button>
             </div>
+        </div>
+        
+        <div class="tariff-card" style="margin-top: 15px; border-color: #00FF88;">
+            <div class="popular-badge" style="background: #00FF88; color: #000;">На 3 устройства</div>
+            <div class="tariff-months">Семейный (1 месяц)</div>
+            <div class="tariff-price" style="color: #00FF88;">300₽</div>
+            <button class="btn-buy" style="background: rgba(0, 255, 136, 0.1);" onclick="confirmFamilyPurchase()">Подключить</button>
         </div>
 
         <div class="promo-card">
@@ -192,7 +200,16 @@
                 const subs = JSON.parse(decodeURIComponent(subsRaw));
                 subsContainer.innerHTML = '';
                 subs.forEach(sub => {
-                    const devIcons = {'ios': '🍏 iOS', 'android': '🤖 Android', 'macos': '🍎 macOS', 'windows': '🪟 Windows', 'gift': '🎁 Подарок', 'trial': '🎟 Пробный'};
+                    const devIcons = {
+                        'ios': '🍏 iOS', 
+                        'android': '🤖 Android', 
+                        'macos': '🍎 macOS', 
+                        'windows': '🪟 Windows', 
+                        'gift': '🎁 Подарок', 
+                        'trial': '🎟 Пробный',
+                        'promo': '🎟 Промокод',
+                        'family': '👨‍👩‍👧 Семейный'
+                    };
                     const icon = devIcons[sub.device.toLowerCase()] || '📱 Устройство';
                     
                     subsContainer.innerHTML += `
@@ -242,6 +259,21 @@
         function confirmPurchase(deviceType) {
             tg.HapticFeedback.impactOccurred('heavy');
             tg.sendData(`buy_${selectedPlan}_${deviceType}`);
+        }
+
+        // Логика покупки семейной подписки
+        function confirmFamilyPurchase() {
+            tg.HapticFeedback.impactOccurred('light');
+            if (userBalance < 300) {
+                tg.showAlert('❌ Недостаточно средств на балансе! Нажмите кнопку "Пополнить".');
+                return;
+            }
+            tg.showConfirm('Подключить "Семейный" тариф (до 3-х устройств одновременно) за 300₽?', function(confirm) {
+                if (confirm) {
+                    tg.HapticFeedback.impactOccurred('heavy');
+                    tg.sendData('buy_family');
+                }
+            });
         }
 
         // Логика промокода
