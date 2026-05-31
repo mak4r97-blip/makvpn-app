@@ -37,6 +37,17 @@
         .tariff-card.popular { border-color: var(--accent-color); }
         .popular-badge { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--accent-color); color: #000; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 10px; text-transform: uppercase; white-space: nowrap; }
 
+        /* БЛОК РЕФЕРАЛКИ */
+        .ref-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; margin-top: 25px; text-align: center; }
+        .ref-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #00FF88; }
+        .ref-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.4; }
+        .ref-link-box { background: rgba(0, 0, 0, 0.2); border: 1px dashed var(--border-color); border-radius: 12px; padding: 12px; font-size: 13px; color: var(--text-main); margin-bottom: 15px; word-break: break-all; font-family: monospace; }
+        .ref-buttons { display: flex; gap: 10px; }
+        .btn-ref-share { background: var(--accent-color); color: #000; border: none; border-radius: 12px; padding: 12px; width: 100%; font-weight: 700; cursor: pointer; transition: 0.1s; }
+        .btn-ref-share:active { transform: scale(0.96); }
+        .btn-ref-copy { background: rgba(255, 255, 255, 0.1); color: var(--text-main); border: none; border-radius: 12px; padding: 12px; width: 100%; font-weight: 600; cursor: pointer; transition: 0.1s; }
+        .btn-ref-copy:active { transform: scale(0.96); }
+
         /* Вкладка Мои подписки */
         .sub-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; margin-bottom: 15px; }
         .sub-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -98,6 +109,16 @@
                 <button class="btn-buy" onclick="openDeviceModal('3_months', 400)">Выбрать</button>
             </div>
         </div>
+
+        <div class="ref-card">
+            <div class="ref-title">🎁 Пригласи друга — получи 75₽</div>
+            <div class="ref-desc">Отправь эту ссылку друзьям. Как только друг зайдет в бота, ты моментально получишь деньги на баланс!</div>
+            <div class="ref-link-box" id="ref-link-text">Генерация ссылки...</div>
+            <div class="ref-buttons">
+                <button class="btn-ref-copy" onclick="copyRefLink()">Копировать</button>
+                <button class="btn-ref-share" onclick="shareRefLink()">Отправить</button>
+            </div>
+        </div>
     </div>
 
     <div class="container" id="tab-subs">
@@ -139,6 +160,10 @@
         const userBalance = parseInt(urlParams.get('balance')) || 0;
         document.getElementById('balance-amount').innerText = userBalance;
 
+        // Инициализация реферальной ссылки
+        const refLink = urlParams.get('ref') || 'Ссылка недоступна';
+        document.getElementById('ref-link-text').innerText = refLink;
+
         // Рендер подписок
         const subsRaw = urlParams.get('subs');
         const subsContainer = document.getElementById('subs-container');
@@ -148,7 +173,7 @@
                 const subs = JSON.parse(decodeURIComponent(subsRaw));
                 subsContainer.innerHTML = '';
                 subs.forEach(sub => {
-                    const devIcons = {'ios': '🍏 iOS', 'android': '🤖 Android', 'macos': '🍎 macOS', 'windows': '🪟 Windows'};
+                    const devIcons = {'ios': '🍏 iOS', 'android': '🤖 Android', 'macos': '🍎 macOS', 'windows': '🪟 Windows', 'gift': '🎁 Подарок'};
                     const icon = devIcons[sub.device] || '📱 Устройство';
                     
                     subsContainer.innerHTML += `
@@ -197,22 +222,48 @@
 
         function confirmPurchase(deviceType) {
             tg.HapticFeedback.impactOccurred('heavy');
-            // Отправляем формат: buy_1_month_ios
             tg.sendData(`buy_${selectedPlan}_${deviceType}`);
         }
 
-        function copyKey(link) {
+        // Общая функция копирования
+        function copyToClipboard(text) {
             const tempInput = document.createElement("textarea");
-            tempInput.value = link;
+            tempInput.value = text;
             document.body.appendChild(tempInput);
             tempInput.select();
             try { 
                 document.execCommand('copy'); 
+                return true;
+            } 
+            catch (err) { return false; } 
+            finally { document.body.removeChild(tempInput); }
+        }
+
+        // Копирование VPN ключа
+        function copyKey(link) {
+            const copied = copyToClipboard(link);
+            if(copied) {
                 tg.HapticFeedback.notificationOccurred('success');
                 tg.showAlert('✅ Ключ скопирован!\n\nОткройте приложение HAPP, нажмите "+" -> "Добавить из буфера обмена".');
-            } 
-            catch (err) { tg.showPopup({title: 'Ваш ключ', message: link}); } 
-            finally { document.body.removeChild(tempInput); }
+            } else {
+                tg.showPopup({title: 'Ваш ключ', message: link});
+            }
+        }
+
+        // Функции для рефералки
+        function copyRefLink() {
+            tg.HapticFeedback.impactOccurred('light');
+            const copied = copyToClipboard(refLink);
+            if(copied) {
+                tg.showAlert('✅ Ссылка скопирована! Отправь её друзьям.');
+            }
+        }
+
+        function shareRefLink() {
+            tg.HapticFeedback.impactOccurred('medium');
+            const shareText = "Привет! Держи топовый и быстрый VPN, работает без перебоев. Залетай по моей ссылке:";
+            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(shareText)}`;
+            tg.openTelegramLink(shareUrl);
         }
     </script>
 </body>
