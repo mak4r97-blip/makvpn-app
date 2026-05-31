@@ -34,224 +34,70 @@
             overflow-x: hidden;
         }
 
-        /* Шапка с приветствием */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .user-greeting { display: flex; flex-direction: column; }
+        .user-greeting span:first-child { font-size: 14px; color: var(--text-muted); }
+        .user-greeting span:last-child { font-size: 20px; font-weight: 700; color: var(--text-main); }
 
-        .user-greeting {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-greeting span:first-child {
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .user-greeting span:last-child {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        /* Карточка баланса */
         .balance-card {
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: 20px; padding: 20px; margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
         }
-
-        .balance-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .balance-label {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-        }
-
-        .balance-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent-color);
-        }
-
+        .balance-info { display: flex; flex-direction: column; }
+        .balance-label { font-size: 14px; color: var(--text-muted); margin-bottom: 5px; }
+        .balance-value { font-size: 28px; font-weight: 700; color: var(--accent-color); }
         .btn-topup {
-            background: rgba(0, 229, 255, 0.1);
-            color: var(--accent-color);
-            border: 1px solid var(--accent-color);
-            border-radius: 14px;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
+            background: rgba(0, 229, 255, 0.1); color: var(--accent-color);
+            border: 1px solid var(--accent-color); border-radius: 14px;
+            padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
         }
+        .btn-topup:active { background: rgba(0, 229, 255, 0.2); transform: scale(0.95); }
 
-        .btn-topup:active {
-            background: rgba(0, 229, 255, 0.2);
-            transform: scale(0.95);
-        }
-
-        /* Главная карточка статуса */
         .status-card {
-            background: var(--surface-color);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
+            background: var(--surface-color); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color); border-radius: 24px; padding: 30px 20px;
+            display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
-
         .status-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 229, 255, 0.05) 0%, transparent 60%);
-            z-index: -1;
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.05) 0%, transparent 60%); z-index: -1;
         }
-
         .shield-icon {
-            width: 70px;
-            height: 70px;
-            background: rgba(0, 229, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-            border: 2px solid var(--accent-color);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+            width: 70px; height: 70px; background: rgba(0, 229, 255, 0.1); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 15px;
+            border: 2px solid var(--accent-color); box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
         }
-
-        .shield-icon svg {
-            width: 35px;
-            height: 35px;
-            fill: var(--accent-color);
-        }
-
-        .status-title {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-        }
-
-        .status-value {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 20px;
-        }
+        .shield-icon svg { width: 35px; height: 35px; fill: var(--accent-color); }
+        .status-title { font-size: 14px; color: var(--text-muted); margin-bottom: 5px; }
+        .status-value { font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; }
 
         .btn-primary {
-            background: linear-gradient(135deg, #00E5FF 0%, #0072FF 100%);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            padding: 16px 32px;
-            font-size: 16px;
-            font-weight: 600;
-            width: 100%;
-            cursor: pointer;
-            transition: transform 0.1s;
-            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.3);
+            background: linear-gradient(135deg, #00E5FF 0%, #0072FF 100%); color: white; border: none;
+            border-radius: 16px; padding: 16px 32px; font-size: 16px; font-weight: 600; width: 100%;
+            cursor: pointer; transition: transform 0.1s; box-shadow: 0 5px 15px rgba(0, 114, 255, 0.3);
         }
+        .btn-primary:active { transform: scale(0.96); }
 
-        .btn-primary:active {
-            transform: scale(0.96);
-        }
-
-        /* Секция тарифов */
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 25px 0 15px 0;
-        }
-
-        .tariffs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
+        .section-title { font-size: 18px; font-weight: 600; margin: 25px 0 15px 0; }
+        .tariffs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .tariff-card {
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: border-color 0.2s;
+            background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 20px;
+            padding: 20px 15px; display: flex; flex-direction: column; align-items: center; text-align: center;
         }
-
-        .tariff-card:active {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .tariff-months {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .tariff-price {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent-color);
-            margin-bottom: 15px;
-        }
-
+        .tariff-card:active { background: rgba(255, 255, 255, 0.1); }
+        .tariff-months { font-size: 18px; font-weight: 700; margin-bottom: 5px; }
+        .tariff-price { font-size: 24px; font-weight: 700; color: var(--accent-color); margin-bottom: 15px; }
         .btn-buy {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 10px 0;
-            width: 100%;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1); color: var(--text-main); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 10px 0; width: 100%; font-size: 14px; font-weight: 600; cursor: pointer;
         }
-
-        .tariff-card.popular {
-            border-color: var(--accent-color);
-            position: relative;
-        }
-
+        .tariff-card.popular { border-color: var(--accent-color); position: relative; }
         .popular-badge {
-            position: absolute;
-            top: -10px;
-            background: var(--accent-color);
-            color: #000;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 10px;
-            text-transform: uppercase;
+            position: absolute; top: -10px; background: var(--accent-color); color: #000; font-size: 10px;
+            font-weight: 800; padding: 4px 10px; border-radius: 10px; text-transform: uppercase;
         }
     </style>
 </head>
@@ -274,9 +120,7 @@
 
     <div class="status-card">
         <div class="shield-icon">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
         <div class="status-title">Твоя подписка</div>
         <div class="status-value" id="status-text">Не активна</div>
@@ -290,14 +134,14 @@
         <div class="tariff-card">
             <div class="tariff-months">1 месяц</div>
             <div class="tariff-price">150₽</div>
-            <button class="btn-buy" onclick="buyPlan('sub_1_month')">Купить</button>
+            <button class="btn-buy" onclick="buyPlan('sub_1_month', 150)">Купить</button>
         </div>
 
         <div class="tariff-card popular">
             <div class="popular-badge">Выгодно</div>
             <div class="tariff-months">3 месяца</div>
             <div class="tariff-price">400₽</div>
-            <button class="btn-buy" onclick="buyPlan('sub_3_months')">Купить</button>
+            <button class="btn-buy" onclick="buyPlan('sub_3_months', 400)">Купить</button>
         </div>
 
     </div>
@@ -314,24 +158,20 @@
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
         }
 
-        // Читаем данные, переданные от бота
         const urlParams = new URLSearchParams(window.location.search);
-        const userBalance = urlParams.get('balance') || '0';
+        const userBalance = parseInt(urlParams.get('balance')) || 0;
         const subActive = urlParams.get('sub_active') || '0';
         const expiresAt = urlParams.get('expires_at') || '';
         const vlessLink = urlParams.get('vless_link') || '';
 
-        // Обновляем Баланс
         document.getElementById('balance-amount').innerText = userBalance;
 
-        // Обновляем статус подписки
         const statusText = document.getElementById('status-text');
         const btnVpn = document.getElementById('btn-vpn');
 
         if (subActive === '1') {
             statusText.innerText = `Активна до ${expiresAt}`;
-            statusText.style.color = '#00FF88'; // Делаем текст зеленым
-            
+            statusText.style.color = '#00FF88';
             if (vlessLink !== '') {
                 btnVpn.innerText = 'Скопировать ключ VPN';
             }
@@ -345,34 +185,22 @@
             tempInput.value = text;
             document.body.appendChild(tempInput);
             tempInput.select();
-            try {
-                document.execCommand('copy');
-                return true;
-            } catch (err) {
-                return false;
-            } finally {
-                document.body.removeChild(tempInput);
-            }
+            try { document.execCommand('copy'); return true; } 
+            catch (err) { return false; } 
+            finally { document.body.removeChild(tempInput); }
         }
 
         function requestVPN() {
             tg.HapticFeedback.impactOccurred('medium');
-            
             if (subActive === '0') {
                 tg.showAlert('⚠️ У вас нет активной подписки. Сначала оплатите тариф в магазине ниже.');
                 return;
             }
-
             if (vlessLink !== '') {
-                // Ключ уже сгенерирован -> копируем его прямо в WebApp
                 const copied = copyToClipboard(vlessLink);
-                if (copied) {
-                    tg.showAlert('✅ Ваш личный ключ успешно скопирован!\n\nЗакройте это окно, откройте приложение v2rayTUN или FoXray, нажмите "+" и выберите "Импорт из буфера обмена".');
-                } else {
-                    tg.showPopup({title: 'Ваш ключ', message: vlessLink});
-                }
+                if (copied) tg.showAlert('✅ Ваш личный ключ успешно скопирован!\n\nИмпортируйте его в приложение v2rayTUN или HAPP.');
+                else tg.showPopup({title: 'Ваш ключ', message: vlessLink});
             } else {
-                // Подписка есть, но ключа еще нет -> просим бота сгенерировать
                 tg.sendData('get_vpn'); 
             }
         }
@@ -382,8 +210,17 @@
             tg.sendData('topup');
         }
 
-        function buyPlan(planId) {
+        // Умная функция покупки
+        function buyPlan(planId, price) {
             tg.HapticFeedback.impactOccurred('heavy');
+            
+            // Если баланс меньше цены тарифа - ругаемся прямо в Mini App
+            if (userBalance < price) {
+                tg.showAlert('❌ Недостаточно средств на балансе! Нажми кнопку "Пополнить".');
+                return;
+            }
+            
+            // Если денег хватает - отправляем команду боту (Mini App автоматически закроется)
             tg.sendData(planId); 
         }
     </script>
