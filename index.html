@@ -37,6 +37,16 @@
         .tariff-card.popular { border-color: var(--accent-color); }
         .popular-badge { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--accent-color); color: #000; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 10px; text-transform: uppercase; white-space: nowrap; }
 
+        /* БЛОК ПРОМОКОДА */
+        .promo-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; margin-top: 25px; }
+        .promo-header { font-size: 16px; font-weight: 700; margin-bottom: 5px; color: var(--text-main); }
+        .promo-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; }
+        .promo-box { display: flex; gap: 10px; }
+        .promo-input { flex: 1; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 15px; color: var(--text-main); font-size: 14px; outline: none; transition: 0.2s; }
+        .promo-input:focus { border-color: var(--accent-color); }
+        .btn-promo { background: var(--accent-color); color: #000; border: none; border-radius: 12px; padding: 0 15px; font-weight: 700; cursor: pointer; transition: 0.1s; }
+        .btn-promo:active { transform: scale(0.96); }
+
         /* БЛОК РЕФЕРАЛКИ */
         .ref-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; margin-top: 25px; text-align: center; }
         .ref-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #00FF88; }
@@ -110,9 +120,18 @@
             </div>
         </div>
 
+        <div class="promo-card">
+            <div class="promo-header">🎟 Промокод</div>
+            <div class="promo-desc">Есть секретный код? Введите его для получения бонуса!</div>
+            <div class="promo-box">
+                <input type="text" id="promo-input" class="promo-input" placeholder="Введите промокод..." autocomplete="off">
+                <button class="btn-promo" onclick="activatePromo()">Применить</button>
+            </div>
+        </div>
+
         <div class="ref-card">
-            <div class="ref-title">🎁 Пригласи друга — получи 75₽</div>
-            <div class="ref-desc">Отправь эту ссылку друзьям. Как только друг зайдет в бота, ты моментально получишь деньги на баланс!</div>
+            <div class="ref-title">🎁 Пригласи друга — получи 10 дней!</div>
+            <div class="ref-desc">Отправь эту ссылку друзьям. Как только друг впервые оплатит VPN, ты получишь 10 дней в подарок, а он — бонусные 5 дней!</div>
             <div class="ref-link-box" id="ref-link-text">Генерация ссылки...</div>
             <div class="ref-buttons">
                 <button class="btn-ref-copy" onclick="copyRefLink()">Копировать</button>
@@ -173,8 +192,8 @@
                 const subs = JSON.parse(decodeURIComponent(subsRaw));
                 subsContainer.innerHTML = '';
                 subs.forEach(sub => {
-                    const devIcons = {'ios': '🍏 iOS', 'android': '🤖 Android', 'macos': '🍎 macOS', 'windows': '🪟 Windows', 'gift': '🎁 Подарок'};
-                    const icon = devIcons[sub.device] || '📱 Устройство';
+                    const devIcons = {'ios': '🍏 iOS', 'android': '🤖 Android', 'macos': '🍎 macOS', 'windows': '🪟 Windows', 'gift': '🎁 Подарок', 'trial': '🎟 Пробный'};
+                    const icon = devIcons[sub.device.toLowerCase()] || '📱 Устройство';
                     
                     subsContainer.innerHTML += `
                         <div class="sub-card">
@@ -223,6 +242,21 @@
         function confirmPurchase(deviceType) {
             tg.HapticFeedback.impactOccurred('heavy');
             tg.sendData(`buy_${selectedPlan}_${deviceType}`);
+        }
+
+        // Логика промокода
+        function activatePromo() {
+            const input = document.getElementById('promo-input');
+            const code = input.value.trim().toUpperCase();
+            
+            if (!code) {
+                tg.showAlert('⚠️ Введите промокод перед активацией.');
+                return;
+            }
+            
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.sendData('promo_' + code);
+            input.value = '';
         }
 
         // Общая функция копирования
