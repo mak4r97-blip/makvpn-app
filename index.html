@@ -8,149 +8,126 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0B0E14;
-            --surface-color: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --accent-color: #00E5FF;
-            --text-main: #FFFFFF;
-            --text-muted: #8B949E;
+            --bg-color: #0B0E14; --surface-color: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1); --accent-color: #00E5FF;
+            --text-main: #FFFFFF; --text-muted: #8B949E; --danger-color: #FF3B30;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            user-select: none;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; user-select: none; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; overflow-x: hidden; }
+        
+        .container { padding: 20px; padding-bottom: 80px; }
         .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-        .user-greeting { display: flex; flex-direction: column; }
-        .user-greeting span:first-child { font-size: 14px; color: var(--text-muted); }
+        .user-greeting span:first-child { font-size: 14px; color: var(--text-muted); display: block; }
         .user-greeting span:last-child { font-size: 20px; font-weight: 700; color: var(--text-main); }
 
         .balance-card {
-            background: var(--surface-color); border: 1px solid var(--border-color);
-            border-radius: 20px; padding: 20px; margin-bottom: 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 20px;
+            padding: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
         }
-        .balance-info { display: flex; flex-direction: column; }
-        .balance-label { font-size: 14px; color: var(--text-muted); margin-bottom: 5px; }
+        .balance-label { font-size: 14px; color: var(--text-muted); display: block; margin-bottom: 5px; }
         .balance-value { font-size: 28px; font-weight: 700; color: var(--accent-color); }
-        .btn-topup {
-            background: rgba(0, 229, 255, 0.1); color: var(--accent-color);
-            border: 1px solid var(--accent-color); border-radius: 14px;
-            padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-        }
-        .btn-topup:active { background: rgba(0, 229, 255, 0.2); transform: scale(0.95); }
-
-        .status-card {
-            background: var(--surface-color); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color); border-radius: 24px; padding: 30px 20px;
-            display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        .status-card::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(0, 229, 255, 0.05) 0%, transparent 60%); z-index: -1;
-        }
-        .shield-icon {
-            width: 70px; height: 70px; background: rgba(0, 229, 255, 0.1); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; margin-bottom: 15px;
-            border: 2px solid var(--accent-color); box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
-        }
-        .shield-icon svg { width: 35px; height: 35px; fill: var(--accent-color); }
-        .status-title { font-size: 14px; color: var(--text-muted); margin-bottom: 5px; }
-        .status-value { font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #00E5FF 0%, #0072FF 100%); color: white; border: none;
-            border-radius: 16px; padding: 16px 32px; font-size: 16px; font-weight: 600; width: 100%;
-            cursor: pointer; transition: transform 0.1s; box-shadow: 0 5px 15px rgba(0, 114, 255, 0.3);
-        }
-        .btn-primary:active { transform: scale(0.96); }
+        .btn-topup { background: rgba(0, 229, 255, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color); border-radius: 14px; padding: 12px 20px; font-weight: 600; cursor: pointer; }
 
         .section-title { font-size: 18px; font-weight: 600; margin: 25px 0 15px 0; }
         .tariffs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .tariff-card {
-            background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 20px;
-            padding: 20px 15px; display: flex; flex-direction: column; align-items: center; text-align: center;
-        }
-        .tariff-card:active { background: rgba(255, 255, 255, 0.1); }
+        .tariff-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px 15px; text-align: center; position: relative; }
         .tariff-months { font-size: 18px; font-weight: 700; margin-bottom: 5px; }
         .tariff-price { font-size: 24px; font-weight: 700; color: var(--accent-color); margin-bottom: 15px; }
-        .btn-buy {
-            background: rgba(255, 255, 255, 0.1); color: var(--text-main); border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 10px 0; width: 100%; font-size: 14px; font-weight: 600; cursor: pointer;
-        }
-        .tariff-card.popular { border-color: var(--accent-color); position: relative; }
-        .popular-badge {
-            position: absolute; top: -10px; background: var(--accent-color); color: #000; font-size: 10px;
-            font-weight: 800; padding: 4px 10px; border-radius: 10px; text-transform: uppercase;
-        }
+        .btn-buy { background: rgba(255, 255, 255, 0.1); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 0; width: 100%; font-weight: 600; cursor: pointer; }
+        .tariff-card.popular { border-color: var(--accent-color); }
+        .popular-badge { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--accent-color); color: #000; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 10px; text-transform: uppercase; white-space: nowrap; }
+
+        /* Вкладка Мои подписки */
+        .sub-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; margin-bottom: 15px; }
+        .sub-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .sub-device { font-weight: 600; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        .sub-status { font-size: 12px; font-weight: 600; color: #00FF88; background: rgba(0, 255, 136, 0.1); padding: 4px 8px; border-radius: 8px; }
+        .sub-date { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; }
+        .btn-copy { background: linear-gradient(135deg, #00E5FF 0%, #0072FF 100%); color: white; border: none; border-radius: 12px; padding: 12px; width: 100%; font-weight: 600; cursor: pointer; }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+
+        /* Навигация (Табы) */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #0B0E14; border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 15px 10px; padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
+        .nav-item { color: var(--text-muted); font-size: 14px; font-weight: 600; text-align: center; flex: 1; cursor: pointer; transition: 0.2s; }
+        .nav-item.active { color: var(--accent-color); }
+
+        /* Модалка выбора устройства */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: flex-end; z-index: 100; }
+        .modal-content { background: #151A23; width: 100%; border-radius: 24px 24px 0 0; padding: 25px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .modal-overlay.active { display: flex; }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; text-align: center; }
+        .device-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .device-btn { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; text-align: center; font-size: 16px; font-weight: 600; color: white; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .device-btn:active { background: rgba(255,255,255,0.1); }
+        .btn-cancel { margin-top: 20px; width: 100%; padding: 15px; background: transparent; border: none; color: var(--text-muted); font-size: 16px; font-weight: 600; cursor: pointer; }
+
+        /* Скрываем вкладки */
+        #tab-subs { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="user-greeting">
-            <span>Добро пожаловать,</span>
-            <span id="username">Пользователь</span>
+    <div class="container" id="tab-shop">
+        <div class="header">
+            <div class="user-greeting">
+                <span>Добро пожаловать,</span>
+                <span id="username">Пользователь</span>
+            </div>
+        </div>
+
+        <div class="balance-card">
+            <div class="balance-info">
+                <span class="balance-label">Мой баланс</span>
+                <div class="balance-value"><span id="balance-amount">0</span> ₽</div>
+            </div>
+            <button class="btn-topup" onclick="tg.sendData('topup')">Пополнить</button>
+        </div>
+
+        <div class="section-title">Продлить доступ (1 устр-во)</div>
+        <div class="tariffs">
+            <div class="tariff-card">
+                <div class="tariff-months">1 месяц</div>
+                <div class="tariff-price">150₽</div>
+                <button class="btn-buy" onclick="openDeviceModal('1_month', 150)">Выбрать</button>
+            </div>
+            <div class="tariff-card popular">
+                <div class="popular-badge">Выгодно</div>
+                <div class="tariff-months">3 месяца</div>
+                <div class="tariff-price">400₽</div>
+                <button class="btn-buy" onclick="openDeviceModal('3_months', 400)">Выбрать</button>
+            </div>
         </div>
     </div>
 
-    <div class="balance-card">
-        <div class="balance-info">
-            <span class="balance-label">Мой баланс</span>
-            <div class="balance-value"><span id="balance-amount">0</span> ₽</div>
-        </div>
-        <button class="btn-topup" onclick="topUp()">Пополнить</button>
+    <div class="container" id="tab-subs">
+        <div class="section-title" style="margin-top:0;">Мои подписки</div>
+        <div id="subs-container">
+            </div>
     </div>
 
-    <div class="status-card">
-        <div class="shield-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <div class="modal-overlay" id="deviceModal">
+        <div class="modal-content">
+            <div class="modal-title">Выберите устройство</div>
+            <div class="device-grid">
+                <button class="device-btn" onclick="confirmPurchase('ios')">🍏 iOS</button>
+                <button class="device-btn" onclick="confirmPurchase('android')">🤖 Android</button>
+                <button class="device-btn" onclick="confirmPurchase('macos')">🍎 macOS</button>
+                <button class="device-btn" onclick="confirmPurchase('windows')">🪟 Windows</button>
+            </div>
+            <button class="btn-cancel" onclick="closeDeviceModal()">Отмена</button>
         </div>
-        <div class="status-title">Твоя подписка</div>
-        <div class="status-value" id="status-text">Не активна</div>
-        
-        <button id="btn-vpn" class="btn-primary" onclick="requestVPN()">Получить настройки</button>
     </div>
 
-    <div class="section-title">Продлить доступ</div>
-    <div class="tariffs">
-        
-        <div class="tariff-card">
-            <div class="tariff-months">1 месяц</div>
-            <div class="tariff-price">150₽</div>
-            <button class="btn-buy" onclick="buyPlan('sub_1_month', 150)">Купить</button>
-        </div>
-
-        <div class="tariff-card popular">
-            <div class="popular-badge">Выгодно</div>
-            <div class="tariff-months">3 месяца</div>
-            <div class="tariff-price">400₽</div>
-            <button class="btn-buy" onclick="buyPlan('sub_3_months', 400)">Купить</button>
-        </div>
-
+    <div class="nav-bar">
+        <div class="nav-item active" id="nav-shop" onclick="switchTab('shop')">🛒 Магазин</div>
+        <div class="nav-item" id="nav-subs" onclick="switchTab('subs')">🛡 Мои подписки</div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
-
         tg.setHeaderColor('#0B0E14');
         tg.setBackgroundColor('#0B0E14');
 
@@ -160,68 +137,82 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const userBalance = parseInt(urlParams.get('balance')) || 0;
-        const subActive = urlParams.get('sub_active') || '0';
-        const expiresAt = urlParams.get('expires_at') || '';
-        const vlessLink = urlParams.get('vless_link') || '';
-
         document.getElementById('balance-amount').innerText = userBalance;
 
-        const statusText = document.getElementById('status-text');
-        const btnVpn = document.getElementById('btn-vpn');
-
-        if (subActive === '1') {
-            statusText.innerText = `Активна до ${expiresAt}`;
-            statusText.style.color = '#00FF88';
-            if (vlessLink !== '') {
-                btnVpn.innerText = 'Скопировать ключ VPN';
+        // Рендер подписок
+        const subsRaw = urlParams.get('subs');
+        const subsContainer = document.getElementById('subs-container');
+        
+        if (subsRaw && subsRaw !== '[]') {
+            try {
+                const subs = JSON.parse(decodeURIComponent(subsRaw));
+                subsContainer.innerHTML = '';
+                subs.forEach(sub => {
+                    const devIcons = {'ios': '🍏 iOS', 'android': '🤖 Android', 'macos': '🍎 macOS', 'windows': '🪟 Windows'};
+                    const icon = devIcons[sub.device] || '📱 Устройство';
+                    
+                    subsContainer.innerHTML += `
+                        <div class="sub-card">
+                            <div class="sub-header">
+                                <div class="sub-device">${icon}</div>
+                                <div class="sub-status">Активна</div>
+                            </div>
+                            <div class="sub-date">Истекает: ${sub.exp}</div>
+                            <button class="btn-copy" onclick="copyKey('${sub.link}')">Скопировать ключ</button>
+                        </div>
+                    `;
+                });
+            } catch (e) {
+                subsContainer.innerHTML = `<div class="empty-state">У вас пока нет активных подписок.</div>`;
             }
         } else {
-            statusText.innerText = 'Не активна';
-            statusText.style.color = 'var(--text-main)';
+            subsContainer.innerHTML = `<div class="empty-state">У вас пока нет активных подписок.<br><br>Перейдите в Магазин для покупки.</div>`;
         }
 
-        function copyToClipboard(text) {
+        function switchTab(tab) {
+            tg.HapticFeedback.selectionChanged();
+            document.getElementById('tab-shop').style.display = tab === 'shop' ? 'block' : 'none';
+            document.getElementById('tab-subs').style.display = tab === 'subs' ? 'block' : 'none';
+            document.getElementById('nav-shop').classList.toggle('active', tab === 'shop');
+            document.getElementById('nav-subs').classList.toggle('active', tab === 'subs');
+        }
+
+        let selectedPlan = '';
+        let selectedPrice = 0;
+
+        function openDeviceModal(plan, price) {
+            tg.HapticFeedback.impactOccurred('light');
+            if (userBalance < price) {
+                tg.showAlert('❌ Недостаточно средств на балансе! Нажмите кнопку "Пополнить".');
+                return;
+            }
+            selectedPlan = plan;
+            selectedPrice = price;
+            document.getElementById('deviceModal').classList.add('active');
+        }
+
+        function closeDeviceModal() {
+            document.getElementById('deviceModal').classList.remove('active');
+        }
+
+        function confirmPurchase(deviceType) {
+            tg.HapticFeedback.impactOccurred('heavy');
+            // Отправляем формат: buy_1_month_ios
+            tg.sendData(`buy_${selectedPlan}_${deviceType}`);
+        }
+
+        function copyKey(link) {
             const tempInput = document.createElement("textarea");
-            tempInput.value = text;
+            tempInput.value = link;
             document.body.appendChild(tempInput);
             tempInput.select();
-            try { document.execCommand('copy'); return true; } 
-            catch (err) { return false; } 
+            try { 
+                document.execCommand('copy'); 
+                tg.HapticFeedback.notificationOccurred('success');
+                tg.showAlert('✅ Ключ скопирован!\n\nОткройте приложение HAPP, нажмите "+" -> "Добавить из буфера обмена".');
+            } 
+            catch (err) { tg.showPopup({title: 'Ваш ключ', message: link}); } 
             finally { document.body.removeChild(tempInput); }
-        }
-
-        function requestVPN() {
-            tg.HapticFeedback.impactOccurred('medium');
-            if (subActive === '0') {
-                tg.showAlert('⚠️ У вас нет активной подписки. Сначала оплатите тариф в магазине ниже.');
-                return;
-            }
-            if (vlessLink !== '') {
-                const copied = copyToClipboard(vlessLink);
-                if (copied) tg.showAlert('✅ Ваш личный ключ успешно скопирован!\n\nИмпортируйте его в приложение v2rayTUN или HAPP.');
-                else tg.showPopup({title: 'Ваш ключ', message: vlessLink});
-            } else {
-                tg.sendData('get_vpn'); 
-            }
-        }
-
-        function topUp() {
-            tg.HapticFeedback.impactOccurred('medium');
-            tg.sendData('topup');
-        }
-
-        // Умная функция покупки
-        function buyPlan(planId, price) {
-            tg.HapticFeedback.impactOccurred('heavy');
-            
-            // Если баланс меньше цены тарифа - ругаемся прямо в Mini App
-            if (userBalance < price) {
-                tg.showAlert('❌ Недостаточно средств на балансе! Нажми кнопку "Пополнить".');
-                return;
-            }
-            
-            // Если денег хватает - отправляем команду боту (Mini App автоматически закроется)
-            tg.sendData(planId); 
         }
     </script>
 </body>
